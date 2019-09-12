@@ -1,9 +1,12 @@
 package com.moneam.themoviedb
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -14,29 +17,39 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var controller: MainController
 
+    private val adapter = ActorsAdapter()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         rv_actors.layoutManager = LinearLayoutManager(this)
-        rv_actors.adapter = ActorsAdapter()
+        rv_actors.adapter = adapter
 
         controller = MainController(this, MainModel())
 
         controller.onCreated()
     }
+
+    fun addList(list: List<Actor>) {
+        adapter.add(list)
+    }
 }
 
-class MainController(val activity: MainActivity, val model: MainModel) {
+class MainController(val view: MainActivity, val model: MainModel) {
     private var page: Int = 1
 
     fun onCreated() {
-        model.getActors(page)
+        model.getActors(page) {
+            view.addList(it)
+        }
     }
 }
 
 class MainModel {
-    fun getActors(page: Int) {
+    private val gson = Gson()
+
+    fun getActors(page: Int, onSuccess: (list: List<Actor>) -> Unit) {
         val urlBuilder = POPULAR_PEOPLE_URL
             .toHttpUrlOrNull()?.newBuilder()
 
@@ -56,7 +69,13 @@ class MainModel {
 
                 override fun onResponse(call: Call, response: Response) {
                     if (response.code == 200) {
-                        Log.v("MainModel", response.body?.string() ?: "")
+                        val actorsResponse = gson.fromJson<ActorsResponse>(
+                            response.body?.string(), ActorsResponse::class.java
+                        )
+
+                        Handler(Looper.getMainLooper()).post {
+                            onSuccess(actorsResponse.results)
+                        }
                     }
                 }
             })
