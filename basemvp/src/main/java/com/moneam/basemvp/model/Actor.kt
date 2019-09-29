@@ -1,5 +1,6 @@
-package com.moneam.themoviedb
+package com.moneam.basemvp.model
 
+import android.graphics.Bitmap
 import com.google.gson.annotations.SerializedName
 
 
@@ -18,7 +19,8 @@ data class Actor(
     @SerializedName("known_for_department") val knownForDepartment: String,
     @SerializedName("name") val name: String,
     @SerializedName("popularity") val popularity: Double,
-    @SerializedName("profile_path") val profilePath: String
+    @SerializedName("profile_path") val profilePath: String,
+    var image: Image? = null
 )
 
 data class KnownFor(
@@ -37,3 +39,5 @@ data class KnownFor(
     @SerializedName("vote_average") val voteAverage: Double,
     @SerializedName("vote_count") val voteCount: Int
 )
+
+data class Image(val url: String, val id: Int, var bitmap: Bitmap?)
