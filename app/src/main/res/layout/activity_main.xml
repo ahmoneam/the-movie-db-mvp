@@ -9,6 +9,17 @@
         android:id="@+id/rv_actors"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        tools:listitem="@layout/item_actor"
+        tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_no_internet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="No Internet Connection\n click to retry "
+        android:visibility="gone"
+        tools:visibility="visible"
         tools:listitem="@layout/item_actor" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

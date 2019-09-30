@@ -1,6 +1,7 @@
 package com.moneam.themoviedb.homeMvp
 
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.moneam.basemvp.base.BaseActivity
 import com.moneam.basemvp.model.Actor
@@ -36,9 +37,20 @@ class HomeMvpActivity : BaseActivity<HomePresenter>(),
                 presenter.loadNextPage()
             }
         })
+
+        tv_no_internet.setOnClickListener {
+            presenter.loadFirstPage()
+        }
     }
 
     override fun addData(results: List<Actor>) {
         adapter.add(results)
+        rv_actors.visibility = View.VISIBLE
+        tv_no_internet.visibility = View.GONE
+    }
+
+    override fun showNoInternetConnection() {
+        rv_actors.visibility = View.GONE
+        tv_no_internet.visibility = View.VISIBLE
     }
 }

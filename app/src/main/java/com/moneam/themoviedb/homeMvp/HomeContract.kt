@@ -3,6 +3,7 @@ package com.moneam.themoviedb.homeMvp
 import com.moneam.basemvp.base.BaseContract
 import com.moneam.basemvp.model.Actor
 import com.moneam.basemvp.model.ActorsResponse
+import io.reactivex.Single
 
 interface HomeContract {
     interface HomeIView : BaseContract.BaseIView {
@@ -20,5 +21,7 @@ interface HomeContract {
             success: (response: ActorsResponse) -> Unit,
             failure: (t: Throwable) -> Unit
         )
+
+        fun getPopularPeople(page: Int): Single<ActorsResponse>
     }
 }

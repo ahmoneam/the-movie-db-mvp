@@ -2,10 +2,12 @@ package com.moneam.basemvp.base
 
 import com.moneam.basemvp.BuildConfig
 import com.moneam.basemvp.model.ActorsResponse
+import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -41,7 +43,8 @@ class RemoteDataSource {
                 val url = request.url
 
                 val newUrl = url.newBuilder()
-                    .addQueryParameter(PARAM_API_KEY, API_KEY).build()
+//                    .addQueryParameter(PARAM_API_KEY, API_KEY)
+                    .build()
 
                 val builder = request.newBuilder()
                 builder.url(newUrl)
@@ -59,6 +62,7 @@ class RemoteDataSource {
             .Builder()
             .baseUrl(TMDB_BAse_URL)
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(okHttpClient)
             .build()
 
@@ -68,5 +72,9 @@ class RemoteDataSource {
         @GET(POPULAR_PEOPLE_URL)
         fun getPopularPeople(@Query(PARAM_PAGE) page: Int)
                 : Call<ActorsResponse>
+
+        @GET(POPULAR_PEOPLE_URL)
+        fun getPopularPeopleObservable(@Query(PARAM_PAGE) page: Int)
+                : Single<ActorsResponse>
     }
 }

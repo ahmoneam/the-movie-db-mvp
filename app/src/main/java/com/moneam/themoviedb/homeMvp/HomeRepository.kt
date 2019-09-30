@@ -2,6 +2,7 @@ package com.moneam.themoviedb.homeMvp
 
 import com.moneam.basemvp.base.BaseRepository
 import com.moneam.basemvp.model.ActorsResponse
+import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,5 +40,10 @@ class HomeRepository : BaseRepository(), HomeContract.HomeIRepository {
                 }
 
             })
+    }
+
+
+    override fun getPopularPeople(page: Int): Single<ActorsResponse> {
+        return remoteDataSource.api.getPopularPeopleObservable(page)
     }
 }

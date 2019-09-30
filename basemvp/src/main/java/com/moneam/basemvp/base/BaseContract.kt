@@ -8,10 +8,11 @@ interface BaseContract {
         fun onViewReady(bundle: Bundle?)
         fun showLoading()
         fun hideLoading()
-        fun showError(error: Int)
-        fun showError(error: String)
+        fun showError(error: Status.Error)
         @LayoutRes
         fun getLayoutResourceId(): Int
+
+        fun showNoInternetConnection()
     }
 
     interface BaseIPresenter {
